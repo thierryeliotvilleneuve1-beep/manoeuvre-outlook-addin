@@ -1,1 +1,529 @@
-placeholder_will_be_replaced
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manoeuvre — CRC</title>
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --rouge-fonce: #8D0005; --rouge-vif: #DD101B; --noir: #0A0A0A;
+      --gris-moyen: #828182; --gris-clair: #C4C4C4; --fond: #F7F7F7; --radius: 6px;
+    }
+    body { font-family: 'Montserrat', sans-serif; font-weight: 300; background: var(--fond); color: var(--noir); font-size: 13px; min-height: 100vh; }
+    .header { background: var(--noir); padding: 14px 16px 12px; display: flex; align-items: center; gap: 10px; border-bottom: 3px solid var(--rouge-vif); }
+    .logo-mark { width: 34px; height: 34px; background: var(--rouge-vif); clip-path: polygon(0 0,85% 0,100% 15%,100% 100%,15% 100%,0 85%); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 11px; color: white; flex-shrink: 0; }
+    .header-brand { font-weight: 800; font-size: 10px; color: white; letter-spacing: 2px; text-transform: uppercase; }
+    .header-sub { font-weight: 300; font-size: 9px; color: var(--gris-clair); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+    .mode-tabs { display: flex; background: var(--noir); padding: 0 16px 12px; gap: 6px; }
+    .tab { flex: 1; padding: 6px 4px; background: transparent; border: 1px solid #333; border-radius: var(--radius); color: var(--gris-moyen); font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; transition: all 0.15s; }
+    .tab.active { background: var(--rouge-fonce); border-color: var(--rouge-fonce); color: white; }
+    .tab:hover:not(.active) { border-color: var(--gris-moyen); color: white; }
+    .body { padding: 14px 16px; }
+    .email-preview { background: white; border: 1px solid var(--gris-clair); border-left: 3px solid var(--rouge-fonce); border-radius: var(--radius); padding: 10px 12px; margin-bottom: 14px; }
+    .email-preview .label { font-size: 9px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; color: var(--gris-moyen); margin-bottom: 6px; }
+    .email-subject { font-weight: 500; font-size: 12px; color: var(--noir); line-height: 1.3; }
+    .email-from { font-weight: 300; font-size: 11px; color: var(--gris-moyen); margin-top: 3px; }
+    .analyse-section { background: white; border: 1px solid var(--gris-clair); border-radius: var(--radius); overflow: hidden; margin-bottom: 14px; }
+    .analyse-header { background: var(--rouge-fonce); padding: 8px 12px; display: flex; align-items: center; gap: 8px; }
+    .analyse-header span { font-weight: 800; font-size: 10px; color: white; letter-spacing: 1px; text-transform: uppercase; }
+    .spinner { width: 12px; height: 12px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
+    .spinner.active { display: block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .fields { padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+    .field-group { display: flex; flex-direction: column; gap: 4px; }
+    .field-label { font-size: 9px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; color: var(--gris-moyen); }
+    .field-input, .field-select, .field-textarea { width: 100%; padding: 8px 10px; border: 1px solid var(--gris-clair); border-radius: var(--radius); font-family: 'Montserrat', sans-serif; font-weight: 300; font-size: 12px; color: var(--noir); background: var(--fond); transition: border-color 0.15s; outline: none; }
+    .field-input:focus, .field-select:focus, .field-textarea:focus { border-color: var(--rouge-fonce); background: white; }
+    .field-textarea { min-height: 70px; resize: vertical; line-height: 1.5; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .attachments-list { display: flex; flex-direction: column; gap: 6px; padding: 12px; }
+    .attachment-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: var(--fond); border: 1px solid var(--gris-clair); border-radius: var(--radius); }
+    .attachment-item input[type="checkbox"] { accent-color: var(--rouge-fonce); width: 14px; height: 14px; flex-shrink: 0; }
+    .attachment-name { flex: 1; font-size: 11px; font-weight: 500; }
+    .attachment-size { font-size: 10px; color: var(--gris-moyen); }
+    .sharepoint-path { padding: 8px 12px 12px; display: flex; flex-direction: column; gap: 4px; }
+    .path-hint { font-size: 10px; color: var(--gris-moyen); margin-top: 4px; }
+    .actions { padding: 4px 0; display: flex; gap: 8px; }
+    .btn-primary { flex: 1; padding: 11px; background: var(--rouge-vif); color: white; border: none; border-radius: var(--radius); font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: background 0.15s; }
+    .btn-primary:hover { background: var(--rouge-fonce); }
+    .btn-primary:disabled { background: var(--gris-clair); cursor: not-allowed; }
+    .btn-secondary { padding: 11px 14px; background: transparent; color: var(--gris-moyen); border: 1px solid var(--gris-clair); border-radius: var(--radius); font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 11px; cursor: pointer; transition: all 0.15s; }
+    .btn-secondary:hover { border-color: var(--gris-moyen); color: var(--noir); }
+    .toast { position: fixed; bottom: 16px; left: 16px; right: 16px; padding: 12px 14px; border-radius: var(--radius); font-weight: 500; font-size: 12px; display: flex; align-items: center; gap: 8px; transform: translateY(80px); opacity: 0; transition: all 0.25s ease; z-index: 100; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: #166534; color: white; }
+    .toast.error { background: var(--rouge-fonce); color: white; }
+    .toast.info { background: var(--noir); color: white; }
+    .empty-state { text-align: center; padding: 30px 20px; color: var(--gris-moyen); }
+    .empty-state .icon { font-size: 32px; margin-bottom: 8px; }
+    .empty-state p { font-size: 12px; line-height: 1.5; }
+    .view { display: none; }
+    .view.active { display: block; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-mark">CRC</div>
+  <div class="header-text">
+    <div class="header-brand">Construction Richard Champagne</div>
+    <div class="header-sub">Manoeuvre · Complément Outlook</div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="tab" id="tab-tache"    onclick="setMode('tache')">➕ Tâche</button>
+  <button class="tab" id="tab-ddc"      onclick="setMode('ddc')">📋 DDC</button>
+  <button class="tab" id="tab-archiver" onclick="setMode('archiver')">📁 Archiver</button>
+</div>
+
+<div class="body">
+
+  <div class="email-preview">
+    <div class="label">Courriel sélectionné</div>
+    <div class="email-subject" id="emailSubject">Chargement…</div>
+    <div class="email-from"    id="emailFrom"></div>
+  </div>
+
+  <div class="view" id="view-tache">
+    <div class="analyse-section">
+      <div class="analyse-header">
+        <span>Analyse IA — Tâche</span>
+        <div class="spinner" id="spinnerTache"></div>
+      </div>
+      <div class="fields">
+        <div class="field-group">
+          <label class="field-label">Projet</label>
+          <select class="field-select" id="tache-projet"><option value="">Sélectionner…</option></select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Titre</label>
+          <input class="field-input" id="tache-titre" type="text" placeholder="Généré par IA…"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Description / Action requise</label>
+          <textarea class="field-textarea" id="tache-description" placeholder="Extraite du courriel…"></textarea>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Assigné à</label>
+            <select class="field-select" id="tache-assigne">
+              <option value="t.villeneuve@c-rc.ca">Thierry</option>
+              <option value="c.milot@c-rc.ca">Carl Milot</option>
+              <option value="d.jean@c-rc.ca">David Jean</option>
+              <option value="m.bacon@c-rc.ca">Marie-Pierre</option>
+              <option value="b.desjardins@c-rc.ca">Benoit Desjardins</option>
+              <option value="g.morin@c-rc.ca">Guylaine Morin</option>
+              <option value="l.desaulniers@c-rc.ca">Louise Desaulniers</option>
+              <option value="x.bouchard@c-rc.ca">Xavier Bouchard</option>
+              <option value="p.dery@c-rc.ca">Pierre Déry</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Priorité</label>
+            <select class="field-select" id="tache-priorite">
+              <option value="critique">🔴 Critique</option>
+              <option value="haute">🟠 Haute</option>
+              <option value="moyenne" selected>🟡 Moyenne</option>
+              <option value="basse">🟢 Basse</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Échéance</label>
+          <input class="field-input" id="tache-echeance" type="date"/>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn-secondary" onclick="analyserCourriel('tache')">🤖 Ré-analyser</button>
+      <button class="btn-primary" id="btn-creer-tache" onclick="creerTache()">Créer la tâche</button>
+    </div>
+  </div>
+
+  <div class="view" id="view-ddc">
+    <div class="analyse-section">
+      <div class="analyse-header">
+        <span>Analyse IA — Directive DDC</span>
+        <div class="spinner" id="spinnerDDC"></div>
+      </div>
+      <div class="fields">
+        <div class="field-group">
+          <label class="field-label">Projet</label>
+          <select class="field-select" id="ddc-projet"><option value="">Sélectionner…</option></select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Titre court</label>
+          <input class="field-input" id="ddc-titre" type="text" placeholder="Ex: Remp. fen. bureau 201"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Description des travaux</label>
+          <textarea class="field-textarea" id="ddc-description" placeholder="Extraite du courriel…" style="min-height:80px"></textarea>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Impact délai (jours)</label>
+            <input class="field-input" id="ddc-delai" type="number" value="0" min="0"/>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Statut initial</label>
+            <select class="field-select" id="ddc-statut">
+              <option value="nouvelle" selected>Nouvelle</option>
+              <option value="interne">Interne</option>
+              <option value="attente_cp">Attente CP</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Assigné à</label>
+          <select class="field-select" id="ddc-assigne">
+            <option value="t.villeneuve@c-rc.ca">Thierry</option>
+            <option value="c.milot@c-rc.ca">Carl Milot</option>
+            <option value="d.jean@c-rc.ca">David Jean</option>
+            <option value="m.bacon@c-rc.ca">Marie-Pierre</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Contexte / Demandeur</label>
+          <input class="field-input" id="ddc-note-demandeur" type="text" placeholder="Ex: Demande de l'architecte Alexandra…"/>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn-secondary" onclick="analyserCourriel('ddc')">🤖 Ré-analyser</button>
+      <button class="btn-primary" id="btn-creer-ddc" onclick="creerDDC()">Créer la DDC</button>
+    </div>
+  </div>
+
+  <div class="view" id="view-archiver">
+    <div class="analyse-section">
+      <div class="analyse-header">
+        <span>Pièces jointes</span>
+        <div class="spinner" id="spinnerArchiver"></div>
+      </div>
+      <div class="attachments-list" id="attachmentsList">
+        <div class="empty-state"><div class="icon">📎</div><p>Chargement…</p></div>
+      </div>
+      <div class="sharepoint-path">
+        <label class="field-label" style="padding:0">Destination SharePoint</label>
+        <input class="field-input" id="archiver-path" type="text" placeholder="/Sites/CRC/Projets/P2XXXX/Correspondance/"/>
+        <div class="path-hint">Détecté automatiquement depuis le no. de projet dans l'objet.</div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn-secondary" onclick="detecterProjet()">🔍 Détecter projet</button>
+      <button class="btn-primary" id="btn-archiver" onclick="archiverPJ()">Archiver</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CONFIG = {
+  CLAUDE_API_KEY:  "VOTRE_CLE_ANTHROPIC",
+  BASE44_API_URL:  "https://api.base44.com/v1",
+  BASE44_API_KEY:  "de56105e236d42d29d2f2c75e84fb9ad",
+  BASE44_APP_ID:   "68927e133cde9f63295dd616",
+  ENTREPRISE_ID:   "68936ee0b0fb9393bf9a11e0",
+  GRAPH_SITE_ID:   "VOTRE_SITE_ID_SHAREPOINT",
+  MON_EMAIL:       "t.villeneuve@c-rc.ca",
+};
+
+let state = {
+  mode: 'tache',
+  email: { subject: '', from: '', body: '', attachments: [] },
+  projets: [],
+};
+
+Office.onReady(async (info) => {
+  if (info.host !== Office.HostType.Outlook) return;
+  const mode = new URLSearchParams(window.location.search).get('mode') || 'tache';
+  setMode(mode);
+  await chargerCourriel();
+  await chargerProjets();
+  await analyserCourriel(mode);
+});
+
+function setMode(mode) {
+  state.mode = mode;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(`tab-${mode}`).classList.add('active');
+  document.getElementById(`view-${mode}`).classList.add('active');
+}
+
+async function chargerCourriel() {
+  return new Promise((resolve) => {
+    const item = Office.context.mailbox.item;
+    state.email.subject     = item.subject || '(Sans objet)';
+    state.email.from        = item.from?.emailAddress || '';
+    state.email.attachments = item.attachments || [];
+    document.getElementById('emailSubject').textContent = state.email.subject;
+    document.getElementById('emailFrom').textContent    = `De : ${state.email.from}`;
+    item.body.getAsync(Office.CoercionType.Text, (r) => {
+      if (r.status === Office.AsyncResultStatus.Succeeded) state.email.body = r.value || '';
+      resolve();
+    });
+  });
+}
+
+async function chargerProjets() {
+  try {
+    const res = await fetch(
+      `${CONFIG.BASE44_API_URL}/apps/${CONFIG.BASE44_APP_ID}/entities/Projet?limit=100`,
+      { headers: { 'Authorization': `Bearer ${CONFIG.BASE44_API_KEY}` } }
+    );
+    if (!res.ok) throw new Error(`${res.status}`);
+    const data = await res.json();
+    state.projets = data.entities || data.items || [];
+    ['tache-projet', 'ddc-projet'].forEach(id => {
+      const sel = document.getElementById(id);
+      sel.innerHTML = '<option value="">Sélectionner un projet…</option>';
+      state.projets
+        .filter(p => !p.statut || p.statut === 'actif')
+        .sort((a, b) => (b.annee_projet || 0) - (a.annee_projet || 0))
+        .forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.id;
+          opt.textContent = `${p.code_projet || '—'} · ${p.nom || '(sans nom)'}`;
+          sel.appendChild(opt);
+        });
+    });
+  } catch(e) {
+    afficherToast('Projets non chargés — vérifier la clé API Base44.', 'info');
+  }
+}
+
+async function analyserCourriel(mode) {
+  if (mode === 'archiver') { detecterProjet(); return; }
+  const sid = mode === 'tache' ? 'spinnerTache' : 'spinnerDDC';
+  document.getElementById(sid).classList.add('active');
+  const prompts = {
+    tache: `Tu es un assistant de gestion de projet pour Construction Richard Champagne (EG québécois).
+Analyse ce courriel. Retourne UNIQUEMENT un JSON valide :
+{"titre":"max 80 chars","description":"2-3 phrases","priorite":"critique|haute|moyenne|basse","echeance_jours":7,"projet_code":"P2XXXX ou null","assigne_email":"t.villeneuve@c-rc.ca|c.milot@c-rc.ca|d.jean@c-rc.ca|m.bacon@c-rc.ca|b.desjardins@c-rc.ca"}
+Objet: ${state.email.subject}
+De: ${state.email.from}
+Corps: ${state.email.body.substring(0,2000)}`,
+    ddc: `Tu es chargé de projet chez Construction Richard Champagne.
+Analyse ce courriel et génère les données d'une directive. Retourne UNIQUEMENT un JSON valide :
+{"titre_court":"max 60 chars","description":"3-5 phrases","modification_echeancier_jours":0,"statut":"nouvelle|interne|attente_cp","projet_code":"P2XXXX ou null","note_demandeur":"contexte","assigne_email":"t.villeneuve@c-rc.ca|c.milot@c-rc.ca|d.jean@c-rc.ca"}
+Objet: ${state.email.subject}
+De: ${state.email.from}
+Corps: ${state.email.body.substring(0,2000)}`
+  };
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 800, messages: [{ role: 'user', content: prompts[mode] }] })
+    });
+    const data = await res.json();
+    const parsed = JSON.parse((data.content?.[0]?.text || '{}').replace(/```json|```/g, '').trim());
+    remplirFormulaire(mode, parsed);
+  } catch(e) {
+    afficherToast('Analyse IA indisponible — remplir manuellement.', 'info');
+  }
+  document.getElementById(sid).classList.remove('active');
+}
+
+function remplirFormulaire(mode, d) {
+  if (mode === 'tache') {
+    if (d.titre)        document.getElementById('tache-titre').value       = d.titre;
+    if (d.description)  document.getElementById('tache-description').value = d.description;
+    if (d.priorite)     document.getElementById('tache-priorite').value    = d.priorite;
+    if (d.assigne_email) document.getElementById('tache-assigne').value    = d.assigne_email;
+    if (d.echeance_jours != null) {
+      const dt = new Date(); dt.setDate(dt.getDate() + parseInt(d.echeance_jours));
+      document.getElementById('tache-echeance').value = dt.toISOString().split('T')[0];
+    }
+    if (d.projet_code) selectionnerParCode('tache-projet', d.projet_code);
+  }
+  if (mode === 'ddc') {
+    if (d.titre_court)  document.getElementById('ddc-titre').value           = d.titre_court;
+    if (d.description)  document.getElementById('ddc-description').value     = d.description;
+    if (d.statut)       document.getElementById('ddc-statut').value          = d.statut;
+    if (d.assigne_email) document.getElementById('ddc-assigne').value        = d.assigne_email;
+    if (d.note_demandeur) document.getElementById('ddc-note-demandeur').value = d.note_demandeur;
+    if (d.modification_echeancier_jours != null)
+      document.getElementById('ddc-delai').value = parseInt(d.modification_echeancier_jours) || 0;
+    if (d.projet_code) selectionnerParCode('ddc-projet', d.projet_code);
+  }
+}
+
+function selectionnerParCode(selId, code) {
+  if (!code) return;
+  const sel = document.getElementById(selId);
+  for (const opt of sel.options)
+    if (opt.textContent.toUpperCase().includes(code.toUpperCase())) { sel.value = opt.value; break; }
+}
+
+async function creerTache() {
+  const titre = document.getElementById('tache-titre').value.trim();
+  if (!titre) { afficherToast('Le titre est obligatoire.', 'info'); return; }
+  const btn = document.getElementById('btn-creer-tache');
+  btn.disabled = true; btn.textContent = 'Création…';
+  const payload = {
+    entreprise_id: CONFIG.ENTREPRISE_ID, titre,
+    description: document.getElementById('tache-description').value || '',
+    assigne_a_email: document.getElementById('tache-assigne').value,
+    assigne_par_email: CONFIG.MON_EMAIL,
+    priorite: document.getElementById('tache-priorite').value,
+    statut: 'a_faire',
+    date_echeance: document.getElementById('tache-echeance').value || undefined,
+    tags: ['outlook'],
+  };
+  const pid = document.getElementById('tache-projet').value;
+  if (pid) payload.projet_id = pid;
+  try {
+    const res = await fetch(`${CONFIG.BASE44_API_URL}/apps/${CONFIG.BASE44_APP_ID}/entities/Tache`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${CONFIG.BASE44_API_KEY}` },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error(await res.text());
+    afficherToast('✅ Tâche créée dans Manoeuvre !', 'success');
+    btn.textContent = '✅ Créée';
+  } catch(e) {
+    afficherToast(`Erreur : ${e.message}`, 'error');
+    btn.disabled = false; btn.textContent = 'Créer la tâche';
+  }
+}
+
+async function creerDDC() {
+  const titreEl = document.getElementById('ddc-titre');
+  const descEl  = document.getElementById('ddc-description');
+  const pid     = document.getElementById('ddc-projet').value;
+  if (!titreEl.value.trim()) { afficherToast('Le titre est obligatoire.', 'info'); return; }
+  if (!descEl.value.trim())  { afficherToast('La description est obligatoire.', 'info'); return; }
+  if (!pid)                  { afficherToast('Sélectionner un projet.', 'info'); return; }
+  const btn = document.getElementById('btn-creer-ddc');
+  btn.disabled = true; btn.textContent = 'Création…';
+  const now = new Date();
+  const numAuto = `DRAFT-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}-${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
+  const note = document.getElementById('ddc-note-demandeur').value.trim();
+  const desc = note ? `${descEl.value.trim()}\n\n[Source: courriel de ${state.email.from} — ${note}]` : descEl.value.trim();
+  const payload = {
+    entreprise_id: CONFIG.ENTREPRISE_ID, numero_directive: numAuto, description: desc, projet_id: pid,
+    titre_court: titreEl.value.trim(),
+    statut: document.getElementById('ddc-statut').value,
+    assigne_a_email: document.getElementById('ddc-assigne').value,
+    modification_echeancier_jours: parseInt(document.getElementById('ddc-delai').value) || 0,
+    date_creation: now.toISOString().split('T')[0],
+    montant_total: 0, travaux_sous_traitance: [], travaux_generaux: [],
+    credits: [], documents: [], historique_modifications: [], conversation_thread: [],
+  };
+  try {
+    const res = await fetch(`${CONFIG.BASE44_API_URL}/apps/${CONFIG.BASE44_APP_ID}/entities/DirectiveChantier`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${CONFIG.BASE44_API_KEY}` },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error(await res.text());
+    const created = await res.json();
+    afficherToast(`✅ DDC créée — ${created.numero_directive || numAuto}`, 'success');
+    btn.textContent = '✅ Créée';
+  } catch(e) {
+    afficherToast(`Erreur : ${e.message}`, 'error');
+    btn.disabled = false; btn.textContent = 'Créer la DDC';
+  }
+}
+
+function detecterProjet() {
+  const match  = state.email.subject.match(/P2\d{4}/i);
+  const numero = match ? match[0].toUpperCase() : null;
+  if (numero) document.getElementById('archiver-path').value = `/Sites/CRC/Projets/${numero}/Correspondance/`;
+  const list = document.getElementById('attachmentsList');
+  if (!state.email.attachments?.length) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">📭</div><p>Aucune pièce jointe dans ce courriel.</p></div>`;
+    return;
+  }
+  list.innerHTML = state.email.attachments.map((att, i) => `
+    <div class="attachment-item">
+      <input type="checkbox" id="att-${i}" checked/>
+      <div class="attachment-name">${att.name}</div>
+      <div class="attachment-size">${formatSize(att.size)}</div>
+    </div>`).join('');
+}
+
+function formatSize(b) {
+  if (!b) return '';
+  if (b < 1024)    return `${b} o`;
+  if (b < 1048576) return `${(b/1024).toFixed(0)} Ko`;
+  return `${(b/1048576).toFixed(1)} Mo`;
+}
+
+async function archiverPJ() {
+  const path = document.getElementById('archiver-path').value.trim();
+  if (!path) { afficherToast('Indiquer le chemin SharePoint.', 'info'); return; }
+  const selected = (state.email.attachments || []).filter((_, i) => document.getElementById(`att-${i}`)?.checked);
+  if (!selected.length) { afficherToast('Sélectionner au moins une pièce jointe.', 'info'); return; }
+  const btn = document.getElementById('btn-archiver');
+  btn.disabled = true;
+  const item = Office.context.mailbox.item;
+  const date = new Date().toISOString().split('T')[0].replace(/-/g, '');
+  const exp  = state.email.from.split('@')[0].substring(0, 20).replace(/[^a-zA-Z0-9]/g, '-');
+  let succes = 0;
+  for (let i = 0; i < selected.length; i++) {
+    const att = selected[i];
+    btn.textContent = `Archivage ${i+1}/${selected.length}…`;
+    try {
+      await new Promise((resolve, reject) => {
+        item.getAttachmentContentAsync(att.id, async (r) => {
+          if (r.status !== Office.AsyncResultStatus.Succeeded) { reject(new Error(r.error?.message)); return; }
+          try {
+            const token    = await obtenirTokenGraph();
+            const safeName = att.name.replace(/[^a-zA-Z0-9._-]/g, '-');
+            const fileName = `${date}_${exp}_${safeName}`;
+            const url      = `https://graph.microsoft.com/v1.0/sites/${CONFIG.GRAPH_SITE_ID}/drive/root:${path}${fileName}:/content`;
+            const binary   = atob(r.value.content);
+            const bytes    = new Uint8Array(binary.length);
+            for (let j = 0; j < binary.length; j++) bytes[j] = binary.charCodeAt(j);
+            const up = await fetch(url, {
+              method: 'PUT',
+              headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/octet-stream' },
+              body: bytes
+            });
+            if (!up.ok) throw new Error(`Graph: ${up.status}`);
+            succes++; resolve();
+          } catch(e) { reject(e); }
+        });
+      });
+    } catch(e) { console.error(`PJ ${att.name}:`, e); }
+  }
+  btn.disabled = false;
+  if (succes === selected.length) {
+    afficherToast(`✅ ${succes} fichier(s) archivé(s) dans SharePoint`, 'success');
+    btn.textContent = `✅ ${succes} archivé(s)`;
+  } else {
+    afficherToast(`⚠️ ${succes}/${selected.length} archivé(s) — voir console`, 'error');
+    btn.textContent = 'Archiver';
+  }
+}
+
+async function obtenirTokenGraph() {
+  return new Promise((resolve, reject) => {
+    Office.context.auth.getAccessTokenAsync(
+      { allowSignInPrompt: true, allowConsentPrompt: true },
+      (r) => {
+        if (r.status === Office.AsyncResultStatus.Succeeded) resolve(r.value);
+        else reject(new Error(r.error?.message || 'Auth Graph échouée'));
+      }
+    );
+  });
+}
+
+function afficherToast(msg, type = 'info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+</script>
+</body>
+</html>
