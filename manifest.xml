@@ -1,123 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<OfficeApp
-      xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
-      xsi:type="MailApp">
-    
-      <Id>64f220e4-5736-4581-b411-a3d4c868a877</Id>
-      <Version>1.0.0.0</Version>
-      <ProviderName>Construction Richard Champagne</ProviderName>
-      <DefaultLocale>fr-CA</DefaultLocale>
-      <DisplayName DefaultValue="Manoeuvre CRC"/>
-      <Description DefaultValue="Creer des taches DDC et archiver des PJ dans Manoeuvre depuis Outlook."/>
-      <IconUrl DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/assets/icon.png"/>
-      <HighResolutionIconUrl DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/assets/icon.png"/>
-      <SupportUrl DefaultValue="https://c-rc.ca"/>
-    
-      <Permissions>ReadWriteMailbox</Permissions>
-      <Rule xsi:type="RuleCollection" Mode="Or">
-              <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read"/>
-              <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit"/>
-      </Rule>
-    
-      <Hosts><Host Name="Mailbox"/></Hosts>
-    
-      <DefaultSettings>
-              <SourceLocation DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/taskpane/index.html"/>
-      </DefaultSettings>
-    
-      <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
-              <Requirements>
-                        <bt:Sets DefaultMinVersion="1.3"><bt:Set Name="Mailbox"/></bt:Sets>
-              </Requirements>
-              <Hosts>
-                        <Host xsi:type="MailHost">
-                                    <DesktopFormFactor>
-                                                  <FunctionFile resid="Commands.Url"/>
-                                                  <ExtensionPoint xsi:type="MessageReadCommandSurface">
-                                                                  <OfficeTab id="TabDefault">
-                                                                                    <Group id="ManoeuvreGroup">
-                                                                                                        <Label resid="GroupLabel"/>
-                                                                                                        <Control xsi:type="Button" id="BtnTache">
-                                                                                                                              <Label resid="BtnTacheLabel"/>
-                                                                                                                              <Supertip><Title resid="BtnTacheTitle"/><Description resid="BtnTacheDesc"/></Supertip>
-                                                                                                                              <Icon><bt:Image size="16" resid="Icon16"/><bt:Image size="32" resid="Icon32"/><bt:Image size="80" resid="Icon80"/></Icon>
-                                                                                                                              <Action xsi:type="ShowTaskpane"><SourceLocation resid="Taskpane.Url.Tache"/></Action>
-                                                                                                            </Control>
-                                                                                                        <Control xsi:type="Button" id="BtnDDC">
-                                                                                                                              <Label resid="BtnDDCLabel"/>
-                                                                                                                              <Supertip><Title resid="BtnDDCTitle"/><Description resid="BtnDDCDesc"/></Supertip>
-                                                                                                                              <Icon><bt:Image size="16" resid="Icon16"/><bt:Image size="32" resid="Icon32"/><bt:Image size="80" resid="Icon80"/></Icon>
-                                                                                                                              <Action xsi:type="ShowTaskpane"><SourceLocation resid="Taskpane.Url.DDC"/></Action>
-                                                                                                            </Control>
-                                                                                                        <Control xsi:type="Button" id="BtnArchiver">
-                                                                                                                              <Label resid="BtnArchiverLabel"/>
-                                                                                                                              <Supertip><Title resid="BtnArchiverTitle"/><Description resid="BtnArchiverDesc"/></Supertip>
-                                                                                                                              <Icon><bt:Image size="16" resid="Icon16"/><bt:Image size="32" resid="Icon32"/><bt:Image size="80" resid="Icon80"/></Icon>
-                                                                                                                              <Action xsi:type="ShowTaskpane"><SourceLocation resid="Taskpane.Url.Archiver"/></Action>
-                                                                                                            </Control>
-                                                                                        </Group>
-                                                                  </OfficeTab>
-                                                  </ExtensionPoint>
-                                    </DesktopFormFactor>
-                        </Host>
-              </Hosts>
-              <Resources>
-                        <bt:Images>
-                                    <bt:Image id="Icon16" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/assets/icon.png"/>
-                                    <bt:Image id="Icon32" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/assets/icon.png"/>
-                                    <bt:Image id="Icon80" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/assets/icon.png"/>
-                        </bt:Images>
-                        <bt:Urls>
-                                    <bt:Url id="Commands.Url" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/taskpane/commands.html"/>
-                                    <bt:Url id="Taskpane.Url.Tache" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/taskpane/index.html?mode=tache"/>
-                                    <bt:Url id="Taskpane.Url.DDC" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/taskpane/index.html?mode=ddc"/>
-                                    <bt:Url id="Taskpane.Url.Archiver" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/taskpane/index.html?mode=archiver"/>
-                        </bt:Urls>
-                        <bt:ShortStrings>
-                                    <bt:String id="GroupLabel" DefaultValue="Manoeuvre"/>
-                                    <bt:String id="BtnTacheLabel" DefaultValue="Tache"/>
-                                    <bt:String id="BtnDDCLabel" DefaultValue="DDC"/>
-                                    <bt:String id="BtnArchiverLabel" DefaultValue="Archiver"/>
-                                    <bt:String id="BtnTacheTitle" DefaultValue="Creer une tache"/>
-                                    <bt:String id="BtnDDCTitle" DefaultValue="Creer une DDC"/>
-                                    <bt:String id="BtnArchiverTitle" DefaultValue="Archiver les PJ"/>
-                        </bt:ShortStrings>
-                        <bt:LongStrings>
-                                    <bt:String id="BtnTacheDesc" DefaultValue="Convertit ce courriel en tache dans Manoeuvre."/>
-                                    <bt:String id="BtnDDCDesc" DefaultValue="Genere une directive DDC depuis ce courriel."/>
-                                    <bt:String id="BtnArchiverDesc" DefaultValue="Sauvegarde les PJ dans SharePoint."/>
-                        </bt:LongStrings>
-              </Resources>
-      </VersionOverrides>
-</OfficeApp><?xml version="1.0" encoding="UTF-8"?>
 <OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xsi:type="MailApp">
-    <Id>64f220e4-5736-4581-b411-a3d4c868a877</Id>
-    <Version>1.0.0.0</Version>
-    <ProviderName>Construction Richard Champagne</ProviderName>
-    <DefaultLocale>fr-CA</DefaultLocale>
-    <DisplayName DefaultValue="Manoeuvre CRC"/>
-    <Description DefaultValue="Creer taches DDC et archiver PJ dans Manoeuvre depuis Outlook."/>
-    <Permissions>ReadWriteMailbox</Permissions>
-    <Rule xsi:type="RuleCollection" Mode="Or"><Rule xsi:type="ItemIs" ItemType="Message" FormType="Read"/><Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit"/></Rule>
-    <Hosts><Host Name="Mailbox"/></Hosts>
-    <DefaultSettings><SourceLocation DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/taskpane/index.html"/></DefaultSettings>
-    <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
-          <Requirements><bt:Sets DefaultMinVersion="1.3"><bt:Set Name="Mailbox"/></bt:Sets></Requirements>
-          <Hosts><Host xsi:type="MailHost"><DesktopFormFactor><FunctionFile resid="Commands.Url"/>
-                  <ExtensionPoint xsi:type="MessageReadCommandSurface"><OfficeTab id="TabDefault"><Group id="ManoeuvreGroup">
-                            <Label resid="GroupLabel"/>
-                            <Control xsi:type="Button" id="BtnTache"><Label resid="BtnTacheLabel"/><Supertip><Title resid="BtnTacheTitle"/><Description resid="BtnTacheDesc"/></Supertip><Icon><bt:Image size="16" resid="Icon16"/><bt:Image size="32" resid="Icon32"/><bt:Image size="80" resid="Icon80"/></Icon><Action xsi:type="ShowTaskpane"><SourceLocation resid="Taskpane.Url.Tache"/></Action></Control>
-                            <Control xsi:type="Button" id="BtnDDC"><Label resid="BtnDDCLabel"/><Supertip><Title resid="BtnDDCTitle"/><Description resid="BtnDDCDesc"/></Supertip><Icon><bt:Image size="16" resid="Icon16"/><bt:Image size="32" resid="Icon32"/><bt:Image size="80" resid="Icon80"/></Icon><Action xsi:type="ShowTaskpane"><SourceLocation resid="Taskpane.Url.DDC"/></Action></Control>
-                            <Control xsi:type="Button" id="BtnArchiver"><Label resid="BtnArchiverLabel"/><Supertip><Title resid="BtnArchiverTitle"/><Description resid="BtnArchiverDesc"/></Supertip><Icon><bt:Image size="16" resid="Icon16"/><bt:Image size="32" resid="Icon32"/><bt:Image size="80" resid="Icon80"/></Icon><Action xsi:type="ShowTaskpane"><SourceLocation resid="Taskpane.Url.Archiver"/></Action></Control>
-                  </Group></OfficeTab></ExtensionPoint>
-          </DesktopFormFactor></Host></Hosts>
-          <Resources>
-                  <bt:Images><bt:Image id="Icon16" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/assets/icon-16.png"/><bt:Image id="Icon32" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/assets/icon-32.png"/><bt:Image id="Icon80" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/assets/icon-80.png"/></bt:Images>
-                  <bt:Urls><bt:Url id="Commands.Url" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/taskpane/commands.html"/><bt:Url id="Taskpane.Url.Tache" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/taskpane/index.html?mode=tache"/><bt:Url id="Taskpane.Url.DDC" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/taskpane/index.html?mode=ddc"/><bt:Url id="Taskpane.Url.Archiver" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/taskpane/index.html?mode=archiver"/></bt:Urls>
-                  <bt:ShortStrings><bt:String id="GroupLabel" DefaultValue="Manoeuvre"/><bt:String id="BtnTacheLabel" DefaultValue="Tache"/><bt:String id="BtnDDCLabel" DefaultValue="DDC"/><bt:String id="BtnArchiverLabel" DefaultValue="Archiver"/><bt:String id="BtnTacheTitle" DefaultValue="Creer une tache"/><bt:String id="BtnDDCTitle" DefaultValue="Creer une DDC"/><bt:String id="BtnArchiverTitle" DefaultValue="Archiver PJ"/></bt:ShortStrings>
-                  <bt:LongStrings><bt:String id="BtnTacheDesc" DefaultValue="Convertit ce courriel en tache dans Manoeuvre."/><bt:String id="BtnDDCDesc" DefaultValue="Genere une directive DDC depuis ce courriel."/><bt:String id="BtnArchiverDesc" DefaultValue="Sauvegarde les PJ dans SharePoint."/></bt:LongStrings>
-          </Resources>
-    </VersionOverrides>
+  <Id>64f220e4-5736-4581-b411-a3d4c868a877</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Construction Richard Champagne</ProviderName>
+  <DefaultLocale>fr-CA</DefaultLocale>
+  <DisplayName DefaultValue="Manoeuvre CRC"/>
+  <Description DefaultValue="Creer des taches DDC et archiver des PJ dans Manoeuvre depuis Outlook."/>
+  <IconUrl DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/assets/icon.png"/>
+  <HighResolutionIconUrl DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/assets/icon.png"/>
+  <SupportUrl DefaultValue="https://c-rc.ca"/>
+  <Permissions>ReadWriteMailbox</Permissions>
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read"/>
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit"/>
+  </Rule>
+  <Hosts><Host Name="Mailbox"/></Hosts>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/taskpane/index.html"/>
+  </DefaultSettings>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Requirements><bt:Sets DefaultMinVersion="1.3"><bt:Set Name="Mailbox"/></bt:Sets></Requirements>
+    <Hosts>
+      <Host xsi:type="MailHost">
+        <DesktopFormFactor>
+          <FunctionFile resid="Commands.Url"/>
+          <ExtensionPoint xsi:type="MessageReadCommandSurface">
+            <OfficeTab id="TabDefault">
+              <Group id="ManoeuvreGroup">
+                <Label resid="GroupLabel"/>
+                <Control xsi:type="Button" id="BtnTache">
+                  <Label resid="BtnTacheLabel"/>
+                  <Supertip><Title resid="BtnTacheTitle"/><Description resid="BtnTacheDesc"/></Supertip>
+                  <Icon><bt:Image size="16" resid="Icon16"/><bt:Image size="32" resid="Icon32"/><bt:Image size="80" resid="Icon80"/></Icon>
+                  <Action xsi:type="ShowTaskpane"><SourceLocation resid="Taskpane.Url.Tache"/></Action>
+                </Control>
+                <Control xsi:type="Button" id="BtnDDC">
+                  <Label resid="BtnDDCLabel"/>
+                  <Supertip><Title resid="BtnDDCTitle"/><Description resid="BtnDDCDesc"/></Supertip>
+                  <Icon><bt:Image size="16" resid="Icon16"/><bt:Image size="32" resid="Icon32"/><bt:Image size="80" resid="Icon80"/></Icon>
+                  <Action xsi:type="ShowTaskpane"><SourceLocation resid="Taskpane.Url.DDC"/></Action>
+                </Control>
+                <Control xsi:type="Button" id="BtnArchiver">
+                  <Label resid="BtnArchiverLabel"/>
+                  <Supertip><Title resid="BtnArchiverTitle"/><Description resid="BtnArchiverDesc"/></Supertip>
+                  <Icon><bt:Image size="16" resid="Icon16"/><bt:Image size="32" resid="Icon32"/><bt:Image size="80" resid="Icon80"/></Icon>
+                  <Action xsi:type="ShowTaskpane"><SourceLocation resid="Taskpane.Url.Archiver"/></Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon16" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/assets/icon.png"/>
+        <bt:Image id="Icon32" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/assets/icon.png"/>
+        <bt:Image id="Icon80" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/assets/icon.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="Commands.Url" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/taskpane/commands.html"/>
+        <bt:Url id="Taskpane.Url.Tache" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/taskpane/index.html?mode=tache"/>
+        <bt:Url id="Taskpane.Url.DDC" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/taskpane/index.html?mode=ddc"/>
+        <bt:Url id="Taskpane.Url.Archiver" DefaultValue="https://thierryeliotvilleneuve1-beep.github.io/manoeuvre-outlook-addin/taskpane/index.html?mode=archiver"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="GroupLabel" DefaultValue="Manoeuvre"/>
+        <bt:String id="BtnTacheLabel" DefaultValue="Tache"/>
+        <bt:String id="BtnDDCLabel" DefaultValue="DDC"/>
+        <bt:String id="BtnArchiverLabel" DefaultValue="Archiver"/>
+        <bt:String id="BtnTacheTitle" DefaultValue="Creer une tache"/>
+        <bt:String id="BtnDDCTitle" DefaultValue="Creer une DDC"/>
+        <bt:String id="BtnArchiverTitle" DefaultValue="Archiver les PJ"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="BtnTacheDesc" DefaultValue="Convertit ce courriel en tache dans Manoeuvre."/>
+        <bt:String id="BtnDDCDesc" DefaultValue="Genere une directive DDC depuis ce courriel."/>
+        <bt:String id="BtnArchiverDesc" DefaultValue="Sauvegarde les PJ dans SharePoint."/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
 </OfficeApp>
